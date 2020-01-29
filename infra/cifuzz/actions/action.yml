@@ -9,9 +9,14 @@ inputs:
     description: 'The total time allotted for fuzzing in seconds.'
     required: true
     default: 360
+  project-repo-name:
+    description: 'The name of the oss-fuzz project's main repo.'
+    required: false
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
   env:
     PROJECT_NAME: ${{ inputs.project-name }}
     FUZZ_SECONDS: ${{ inputs.fuzz-seconds }}
+    PROJECT_REPO_NAME: ${{ inputs.project-repo-name }}

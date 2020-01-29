@@ -17,6 +17,7 @@ import os
 import sys
 
 # pylint: disable=wrong-import-position
+# pylint: disable=import-error
 sys.path.append(os.path.join(os.environ['OSS_FUZZ_ROOT'], 'infra', 'cifuzz'))
 import cifuzz
 
@@ -43,8 +44,15 @@ def main():
   """
   oss_fuzz_project_name = os.environ.get('PROJECT_NAME')
   fuzz_seconds = int(os.environ.get('FUZZ_SECONDS', 360))
-  github_repo_name = os.path.basename(os.environ.get('GITHUB_REPOSITORY'))
+  github_repo_name = os.environ.get('PROJECT_REPO_NAME')
+  if not github_repo_name:
+    github_repo_name = os.path.basename(os.environ.get('GITHUB_REPOSITORY'))
   commit_sha = os.environ.get('GITHUB_SHA')
+
+  logging.info(
+      'Running CIFuzz with oss-fuzz project: %s\ntime: %s\ngithub repo: %s\n'
+      'commit sha: %s ', oss_fuzz_project_name, fuzz_seconds, github_repo_name,
+      commit_sha)
 
   # Get the shared volume directory and create required directorys.
   workspace = os.environ.get('GITHUB_WORKSPACE')
